@@ -414,6 +414,7 @@ header.hero::before {
   border-radius: 100px;
   margin-bottom: 30px;
   backdrop-filter: blur(8px);
+  max-width: 100%; /* shrink/wrap on narrow screens instead of overflowing */
 }
 .badge .pulse {
   width: 7px;
@@ -441,6 +442,7 @@ h1.title {
   line-height: 0.95;
   letter-spacing: -0.035em;
   margin-bottom: 26px;
+  overflow-wrap: break-word;
 }
 .tagline {
   font-size: clamp(16px, 2.2vw, 20px);
@@ -557,6 +559,19 @@ section {
   }
   section .section-lead {
     margin-inline: auto;
+  }
+}
+/* very small screens: scale the hero title down so it can't exceed the
+   viewport (oversized text was forcing horizontal overflow), and tighten
+   side padding so content fills the width */
+@media (max-width: 480px) {
+  h1.title {
+    font-size: clamp(30px, 11vw, 46px);
+  }
+  .wrap,
+  .hero-inner {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 }
 .eyebrow {
