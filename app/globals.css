@@ -349,6 +349,7 @@ nav.scrolled .nav-inner {
 /* hero */
 header.hero {
   min-height: 100vh;
+  min-height: 100dvh; /* avoid mobile address-bar overflow pushing content down */
   display: flex;
   align-items: center;
   position: relative;
@@ -527,6 +528,18 @@ section {
   padding: 120px 0;
   position: relative;
   z-index: 2;
+}
+/* tighten vertical rhythm + hero centering on phones */
+@media (max-width: 640px) {
+  section {
+    padding: 80px 0;
+  }
+  .hero-inner {
+    padding-top: 64px;
+  }
+  footer {
+    padding: 56px 0 28px;
+  }
 }
 .eyebrow {
   font-family: var(--body);
