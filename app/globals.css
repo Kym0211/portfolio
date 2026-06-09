@@ -349,7 +349,6 @@ nav.scrolled .nav-inner {
 /* hero */
 header.hero {
   min-height: 100vh;
-  min-height: 100dvh; /* avoid mobile address-bar overflow pushing content down */
   display: flex;
   align-items: center;
   position: relative;
@@ -414,7 +413,6 @@ header.hero::before {
   border-radius: 100px;
   margin-bottom: 30px;
   backdrop-filter: blur(8px);
-  max-width: 100%; /* shrink/wrap on narrow screens instead of overflowing */
 }
 .badge .pulse {
   width: 7px;
@@ -442,7 +440,6 @@ h1.title {
   line-height: 0.95;
   letter-spacing: -0.035em;
   margin-bottom: 26px;
-  overflow-wrap: break-word;
 }
 .tagline {
   font-size: clamp(16px, 2.2vw, 20px);
@@ -531,47 +528,68 @@ section {
   position: relative;
   z-index: 2;
 }
-/* tighten vertical rhythm + center hero/headers on phones so content
-   reads balanced instead of hugging the left with empty space on the right */
-@media (max-width: 640px) {
-  section {
-    padding: 80px 0;
+/* ============================================================== *
+ * MOBILE (<= 500px) — self-contained. Nothing above 500px is
+ * affected. The root problem was horizontal overflow: oversized
+ * text / non-shrinking rows made the page wider than the screen,
+ * so content ended up in a column narrower than the viewport.
+ * This block kills every overflow source and keeps content
+ * left-aligned and full-width.
+ * ============================================================== */
+@media (max-width: 500px) {
+  /* hard guarantee: the page can never be wider than the screen */
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100%;
   }
-  footer {
-    padding: 56px 0 28px;
-  }
-  /* center the hero */
-  .hero-inner {
-    padding-top: 64px;
-    text-align: center;
-  }
-  .tagline {
-    margin-inline: auto;
-  }
-  .cta-row {
-    justify-content: center;
-  }
-  /* center the section headers (body text stays left-aligned for readability) */
-  section .eyebrow,
-  section .section-title,
-  section .section-lead {
-    text-align: center;
-  }
-  section .section-lead {
-    margin-inline: auto;
-  }
-}
-/* very small screens: scale the hero title down so it can't exceed the
-   viewport (oversized text was forcing horizontal overflow), and tighten
-   side padding so content fills the width */
-@media (max-width: 480px) {
-  h1.title {
-    font-size: clamp(30px, 11vw, 46px);
-  }
+
+  /* full-bleed-ish: smaller gutters so content uses the whole width */
   .wrap,
   .hero-inner {
-    padding-left: 22px;
-    padding-right: 22px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* hero */
+  header.hero {
+    min-height: 100svh; /* fits the visible viewport, not the address-bar one */
+  }
+  .hero-inner {
+    padding-top: 96px;
+  }
+  h1.title {
+    font-size: clamp(34px, 11vw, 50px); /* scales with width → never overflows */
+    overflow-wrap: break-word;
+  }
+  .tagline,
+  .badge {
+    max-width: 100%;
+  }
+
+  /* tighter vertical rhythm */
+  section {
+    padding: 72px 0;
+  }
+  footer {
+    padding: 52px 0 28px;
+  }
+
+  /* stat cards: let the 3 tracks shrink instead of forcing the grid wide */
+  .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* guestbook: stack the inputs so the name+message+button row can't overflow */
+  .gb-input {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .gb-name {
+    max-width: none;
+  }
+  .gb-input button {
+    padding: 12px 20px;
   }
 }
 .eyebrow {

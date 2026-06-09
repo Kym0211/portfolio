@@ -8,7 +8,7 @@ export const site = {
   url: "https://kavyam.me",
   socials: {
     github: "https://github.com/Kym0211",
-    linkedin: "https://www.linkedin.com/in/kavyam-singh-2338462a2",
+    linkedin: "https://www.linkedin.com/in/kym0211/",
     x: "https://x.com/KavyamSingh",
   },
   coffeeUrl: "https://ko-fi.com/kavyam02",
