@@ -529,16 +529,34 @@ section {
   position: relative;
   z-index: 2;
 }
-/* tighten vertical rhythm + hero centering on phones */
+/* tighten vertical rhythm + center hero/headers on phones so content
+   reads balanced instead of hugging the left with empty space on the right */
 @media (max-width: 640px) {
   section {
     padding: 80px 0;
   }
-  .hero-inner {
-    padding-top: 64px;
-  }
   footer {
     padding: 56px 0 28px;
+  }
+  /* center the hero */
+  .hero-inner {
+    padding-top: 64px;
+    text-align: center;
+  }
+  .tagline {
+    margin-inline: auto;
+  }
+  .cta-row {
+    justify-content: center;
+  }
+  /* center the section headers (body text stays left-aligned for readability) */
+  section .eyebrow,
+  section .section-title,
+  section .section-lead {
+    text-align: center;
+  }
+  section .section-lead {
+    margin-inline: auto;
   }
 }
 .eyebrow {
