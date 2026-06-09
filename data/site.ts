@@ -5,7 +5,7 @@ export const site = {
   tagline:
     "Kavyam — a third-year engineer shipping full-stack apps and Solana infrastructure, with a soft spot for systems that hold up end to end.",
   email: "kavyam.ksingh@gmail.com",
-  url: "https://kavyam.dev",
+  url: "https://kavyam.me",
   socials: {
     github: "https://github.com/Kym0211",
     linkedin: "https://www.linkedin.com/in/kavyam-singh-2338462a2",

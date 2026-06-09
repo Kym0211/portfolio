@@ -65,45 +65,56 @@ protection via a **honeypot** field plus **per-IP rate limiting** (5 posts / 60s
 
 ### Set it up
 
-1. In the Vercel dashboard: **Storage → Marketplace → Upstash → Redis**, create a
-   database, and connect it to this project. Vercel injects the credentials as
-   environment variables automatically.
-2. Or create a database at <https://console.upstash.com> and copy its REST URL
-   and token.
+1. Create a Redis database at <https://console.upstash.com> (or via the Upstash
+   integration in the Cloudflare dashboard) and copy its REST URL and token.
 
 The code accepts either naming convention:
 
 | Variable | Notes |
 | --- | --- |
-| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | injected by the Vercel Marketplace integration |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | the names used here / in `.dev.vars` |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | standalone Upstash naming |
 
-For local testing against a real database, copy `.env.example` to `.env.local`
-and fill in the values:
-
-```bash
-cp .env.example .env.local
-# then edit .env.local
-```
+For local testing against a real database, fill the values into **`.dev.vars`**
+(used by `npm run preview`) — it's git-ignored. Plain `npm run dev` reads
+`.env.local` if you prefer that for the Next dev server.
 
 No secrets are referenced in client code — all storage access is `server-only`.
 
-## Deploy to Vercel
+## Deploy to Cloudflare Workers (OpenNext)
 
-1. Push this repo to GitHub.
-2. Import it at <https://vercel.com/new> (framework auto-detected as Next.js).
-3. Add the **Upstash Redis** integration from the Marketplace and link it to the
-   project (this provisions the env vars). Without it, the site still deploys —
-   the guestbook just won't persist across requests.
-4. Deploy. Subsequent pushes to `main` deploy automatically.
-
-Or from the CLI:
+This app runs on Cloudflare Workers via the [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare)
+adapter. Config lives in `wrangler.jsonc` + `open-next.config.ts`.
 
 ```bash
-npm i -g vercel
-vercel            # preview deployment
-vercel --prod     # production
+# 1. Build the Worker and preview it locally on the real Workers runtime:
+npm run preview            # http://localhost:8787
+
+# 2. Log in to Cloudflare (one-time, opens a browser):
+npx wrangler login
+
+# 3. Deploy:
+npm run deploy
 ```
+
+After the first deploy, add your Upstash credentials as **Worker secrets** so the
+guestbook persists, then redeploy:
+
+```bash
+npx wrangler secret put KV_REST_API_URL
+npx wrangler secret put KV_REST_API_TOKEN
+npm run deploy
+```
+
+(Without the secrets the site still deploys — the guestbook just uses the
+in-memory fallback and won't persist.)
+
+### Custom domain
+
+Since the domain's DNS is on Cloudflare: in the dashboard go to
+**Workers & Pages → kavyam-portfolio → Settings → Domains & Routes → Add custom
+domain**, enter your domain, and Cloudflare wires the DNS + SSL automatically.
+Then update `url` in `data/site.ts` to that domain (for correct OG/canonical URLs).
 
 ## Performance & accessibility
 

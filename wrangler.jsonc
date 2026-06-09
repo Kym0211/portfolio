@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kavyam-portfolio",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Custom domains (Cloudflare auto-creates the DNS records + SSL certs since
+  // kavyam.me is a zone in this account). Both apex and www serve the site;
+  // the apex is canonical (see data/site.ts).
+  "routes": [
+    { "pattern": "kavyam.me", "custom_domain": true },
+    { "pattern": "www.kavyam.me", "custom_domain": true }
+  ]
+  // Guestbook uses Upstash Redis over HTTPS, so no Cloudflare DB binding is
+  // needed. Secrets KV_REST_API_URL / KV_REST_API_TOKEN are already set:
+  //   npx wrangler secret put KV_REST_API_URL
+}
